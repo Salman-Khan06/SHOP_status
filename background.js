@@ -27,3 +27,12 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
+
+// After generating the code, immediately create entry in Firebase
+window.__fbSet(window.__fbRef('shops/' + code), {
+  status: 'unknown',
+  registeredAt: new Date().toISOString(),
+  openTime: '--:--',
+  closeTime: '--:--',
+  lastUpdated: '--'
+});
