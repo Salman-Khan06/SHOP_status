@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <title>Shop Status Controller</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:        #0b0e14;
+            --card:      #12161f;
+            --card2:     #181d28;
+            --border:    rgba(255,255,255,0.06);
+            --border2:   rgba(255,255,255,0.10);
+            --text:      #dde4f0;
+            --muted:     #4e5a70;
+            --muted2:    #6b7a94;
+            --green:     #0ddb7a;
+            --green-glow:rgba(13,219,122,0.18);
+            --red:       #f03e5a;
+            --red-glow:  rgba(240,62,90,0.18);
+            --gold:      #f5b942;
+            --font:      'Outfit', sans-serif;
+            --mono:      'JetBrains Mono', monospace;
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100svh;
+            padding: 20px;
+        }
+
+        /* ── Noise texture overlay ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0;
+        }
+
+        .card {
+            position: relative; z-index: 1;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            border-radius: 28px;
+            padding: 36px 32px 32px;
+            width: 100%; max-width: 380px;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.03),
+                0 24px 64px rgba(0,0,0,0.6),
+                0 4px 16px rgba(0,0,0,0.4);
+            animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(24px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+
+        /* ── Top bar ── */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .brand {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted2);
+        }
+
+        .live-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(13,219,122,0.08);
+            border: 1px solid rgba(13,219,122,0.2);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--green);
+            text-transform: uppercase;
+        }
+
+        .live-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: blink 1.8s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%,100% { opacity:1; box-shadow: 0 0 6px var(--green); }
+            50%      { opacity:0.3; box-shadow: none; }
+        }
+
+        /* ── Status ring ── */
+        .status-ring-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .ring {
+            width: 120px; height: 120px;
+            border-radius: 50%;
+            border: 2px solid var(--border2);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            position: relative;
+            margin-bottom: 14px;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            background: var(--card2);
+        }
+
+        .ring.is-open {
+            border-color: rgba(13,219,122,0.5);
+            box-shadow: 0 0 0 8px rgba(13,219,122,0.06), 0 0 32px rgba(13,219,122,0.15);
+        }
+
+        .ring.is-closed {
+            border-color: rgba(240,62,90,0.5);
+            box-shadow: 0 0 0 8px rgba(240,62,90,0.06), 0 0 32px rgba(240,62,90,0.15);
+        }
+
+        .ring-emoji { font-size: 36px; line-height: 1; margin-bottom: 2px; }
+
+        .ring-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted2);
+            transition: color 0.3s;
+        }
+
+        .ring.is-open  .ring-label { color: var(--green); }
+        .ring.is-closed .ring-label { color: var(--red); }
+
+        .status-since {
+            font-size: 12px;
+            color: var(--muted);
+            font-family: var(--mono);
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Timing row ── */
+        .timing-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .time-box {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            transition: border-color 0.3s;
+        }
+
+        .time-box.has-open  { border-color: rgba(13,219,122,0.2); }
+        .time-box.has-close { border-color: rgba(240,62,90,0.2); }
+
+        .time-box-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .time-box-label span { font-size: 12px; }
+
+        .time-box-value {
+            font-family: var(--mono);
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--muted2);
+            transition: color 0.3s;
+            letter-spacing: -0.5px;
+        }
+
+        .time-box.has-open  .time-box-value { color: var(--green); }
+        .time-box.has-close .time-box-value { color: var(--red); }
+
+        /* ── Duration badge ── */
+        .duration-bar {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            font-size: 12px;
+        }
+
+        .dur-label { color: var(--muted); font-weight: 500; }
+        .dur-value {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gold);
+            background: rgba(245,185,66,0.08);
+            border: 1px solid rgba(245,185,66,0.15);
+            border-radius: 8px;
+            padding: 3px 10px;
+        }
+
+        /* ── Buttons ── */
+        .btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            position: relative;
+            overflow: hidden;
+            padding: 16px 12px;
+            border-radius: 16px;
+            border: 1.5px solid var(--border2);
+            background: var(--card2);
+            color: var(--muted2);
+            font-family: var(--font);
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-icon { font-size: 20px; }
+
+        /* Ripple */
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.12) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn:active::after { opacity: 1; }
+
+        /* Hover (non-active) */
+        .btn-open:not(.active):hover {
+            border-color: rgba(13,219,122,0.3);
+            color: rgba(13,219,122,0.6);
+        }
+
+        .btn-close:not(.active):hover {
+            border-color: rgba(240,62,90,0.3);
+            color: rgba(240,62,90,0.6);
+        }
+
+        /* Active states */
+        .btn-open.active {
+            background: var(--green-glow);
+            border-color: rgba(13,219,122,0.5);
+            color: var(--green);
+            box-shadow: 0 0 24px rgba(13,219,122,0.2), inset 0 1px 0 rgba(13,219,122,0.15);
+        }
+
+        .btn-close.active {
+            background: var(--red-glow);
+            border-color: rgba(240,62,90,0.5);
+            color: var(--red);
+            box-shadow: 0 0 24px rgba(240,62,90,0.2), inset 0 1px 0 rgba(240,62,90,0.15);
+        }
+
+        /* Scale on press */
+        .btn:active { transform: scale(0.96); }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+            font-family: var(--mono);
+            letter-spacing: 0.5px;
+        }
+
+        .footer strong {
+            color: var(--muted2);
+        }
+
+        /* ── Syncing overlay ── */
+        .syncing {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* ── Clock ── */
+        .clock {
+            font-family: var(--mono);
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--text);
+            letter-spacing: -1px;
+            margin-bottom: 2px;
+        }
+
+        .clock-date {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="card">
+
+    <!-- Top bar -->
+    <div class="topbar">
+        <div class="brand">ShopStatus</div>
+        <div class="live-pill"><div class="live-dot"></div> Live</div>
+    </div>
+
+    <!-- Live clock -->
+    <div style="text-align:center;">
+        <div class="clock" id="liveClock">--:--:--</div>
+        <div class="clock-date" id="liveDate">---</div>
+    </div>
+
+    <!-- Status ring -->
+    <div class="status-ring-wrap">
+        <div class="ring" id="ring">
+            <div class="ring-emoji" id="ringEmoji">⬜</div>
+            <div class="ring-label" id="ringLabel">Syncing</div>
+        </div>
+        <div class="status-since" id="statusSince">Connecting to database…</div>
+    </div>
+
+    <!-- Open / Close times -->
+    <div class="timing-row">
+        <div class="time-box" id="openBox">
+            <div class="time-box-label"><span>🟢</span> Opened</div>
+            <div class="time-box-value" id="openTime">--:--</div>
+        </div>
+        <div class="time-box" id="closeBox">
+            <div class="time-box-label"><span>🔴</span> Closed</div>
+            <div class="time-box-value" id="closeTime">--:--</div>
+        </div>
+    </div>
+
+    <!-- Duration open today -->
+    <div class="duration-bar">
+        <div class="dur-label">Open duration today</div>
+        <div class="dur-value" id="durValue">-- hr -- min</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+        <button id="openBtn" class="btn btn-open" onclick="updateStatus('Open')">
+            <span class="btn-icon">🟢</span>OPEN
+        </button>
+        <button id="closeBtn" class="btn btn-close" onclick="updateStatus('Closed')">
+            <span class="btn-icon">🔴</span>CLOSED
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Last sync: <strong id="lastSync">--</strong>
+    </div>
+
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA0O6Ilwg8Y6GsyC36VQWVAB2YeMwhtowM",
+        databaseURL: "https://gpstracking-2db8a-default-rtdb.firebaseio.com",
+        projectId: "gpstracking-2db8a",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+    const statusRef = ref(db, 'shop/status_data');
+
+    // ── Live clock ──────────────────────────────
+    function tickClock() {
+        const now = new Date();
+        document.getElementById('liveClock').textContent =
+            now.toLocaleTimeString('en-PK', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        document.getElementById('liveDate').textContent =
+            now.toLocaleDateString('en-PK', { weekday:'long', day:'numeric', month:'long' });
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+
+    // ── Duration tracker ────────────────────────
+    let openedAt = null;
+    let durationInterval = null;
+
+    function startDurationTicker(openTimeStr) {
+        if (durationInterval) clearInterval(durationInterval);
+        if (!openTimeStr || openTimeStr === '--:--') {
+            document.getElementById('durValue').textContent = '-- hr -- min';
+            return;
+        }
+        const today = new Date().toDateString();
+        const parts = openTimeStr.split(':');
+        openedAt = new Date(`${today} ${openTimeStr}`);
+
+        function tick() {
+            if (!openedAt) return;
+            const diff = Math.max(0, Date.now() - openedAt.getTime());
+            const hrs  = Math.floor(diff / 3600000);
+            const mins = Math.floor((diff % 3600000) / 60000);
+            document.getElementById('durValue').textContent =
+                `${hrs} hr ${String(mins).padStart(2,'0')} min`;
+        }
+        tick();
+        durationInterval = setInterval(tick, 30000);
+    }
+
+    // ── Format time helper ───────────────────────
+    function fmtTime(ts) {
+        if (!ts) return '--:--';
+        return ts;
+    }
+
+    // ── Update UI ────────────────────────────────
+    function applyUI(status, openTime, closeTime, lastUpdated) {
+        const ring     = document.getElementById('ring');
+        const emoji    = document.getElementById('ringEmoji');
+        const label    = document.getElementById('ringLabel');
+        const since    = document.getElementById('statusSince');
+        const openBtn  = document.getElementById('openBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const openBox  = document.getElementById('openBox');
+        const closeBox = document.getElementById('closeBox');
+
+        ring.classList.remove('is-open','is-closed');
+
+        if (status === 'Open') {
+            ring.classList.add('is-open');
+            emoji.textContent  = '🟢';
+            label.textContent  = 'OPEN';
+            since.textContent  = `Since ${fmtTime(openTime)}`;
+            openBtn.classList.add('active');
+            closeBtn.classList.remove('active');
+            openBox.classList.add('has-open');
+            startDurationTicker(openTime);
+        } else if (status === 'Closed') {
+            ring.classList.add('is-closed');
+            emoji.textContent  = '🔴';
+            label.textContent  = 'CLOSED';
+            since.textContent  = `Closed at ${fmtTime(closeTime)}`;
+            closeBtn.classList.add('active');
+            openBtn.classList.remove('active');
+            closeBox.classList.add('has-close');
+            if (durationInterval) clearInterval(durationInterval);
+            openedAt = null;
+            document.getElementById('durValue').textContent = '-- hr -- min';
+        } else {
+            emoji.textContent  = '⬜';
+            label.textContent  = 'UNKNOWN';
+            since.textContent  = 'No update yet today';
+            openBtn.classList.remove('active');
+            closeBtn.classList.remove('active');
+        }
+
+        document.getElementById('openTime').textContent  = fmtTime(openTime);
+        document.getElementById('closeTime').textContent = fmtTime(closeTime);
+        document.getElementById('lastSync').textContent  = lastUpdated || '--';
+    }
+
+    // ── Write to Firebase ────────────────────────
+    window.updateStatus = (status) => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-PK', {
+            hour:'2-digit', minute:'2-digit', second:'2-digit'
+        });
+
+        // Read current data first to preserve opposite time
+        onValue(statusRef, (snap) => {
+            const cur = snap.val() || {};
+            const update = {
+                status,
+                lastUpdated: timeStr,
+                openTime:  status === 'Open'   ? timeStr : (cur.openTime  || '--:--'),
+                closeTime: status === 'Closed' ? timeStr : (cur.closeTime || '--:--'),
+            };
+            set(statusRef, update).catch(console.error);
+        }, { onlyOnce: true });
+    };
+
+    // ── Listen for live updates ───────────────────
+    onValue(statusRef, (snap) => {
+        const data = snap.val();
+        if (!data) {
+            applyUI(null, null, null, null);
+            return;
+        }
+        applyUI(data.status, data.openTime, data.closeTime, data.lastUpdated);
+    });
+</script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./background.js');
+    }
+</script>
+</body>
+</html>
