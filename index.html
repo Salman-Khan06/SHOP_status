@@ -332,7 +332,17 @@ function generateCode(cat, phone, area) {
   }
   return code.slice(0,8);
 }
-
+// ← ADD THIS NEW FUNCTION HERE ←
+function decodeShopCode(code) {
+  let decoded = '';
+  for (let i = 0; i < 8; i++) {
+    const base36Val = parseInt(code.charAt(i), 36);
+    const original = base36Val ^ SECRET[i];
+    decoded += String.fromCharCode(original);
+  }
+  return decoded;
+}
+// ← END NEW FUNCTION ←
 const CAT_ICONS = {GR:'🛒',MD:'💊',FD:'🍽️',EL:'📱',CL:'👕',HW:'🔧',BK:'🍞',OT:'🏪'};
 const CAT_NAMES = {GR:'Grocery',MD:'Medical',FD:'Food',EL:'Electronics',CL:'Clothing',HW:'Hardware',BK:'Bakery',OT:'Other'};
 
