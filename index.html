@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,125 +9,109 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-/* ══ THEME VARS ══ */
+/* ══ THEME ══ */
 :root{
   --bg:#07090e;--card:#0d1117;--card2:#131a23;
   --b1:rgba(255,255,255,0.06);--b2:rgba(255,255,255,0.10);
   --text:#e2eaf5;--muted:#3d4f63;--muted2:#5c7389;
-  --green:#05d67a;--gg:rgba(5,214,122,0.13);--gg2:rgba(5,214,122,0.06);
+  --green:#05d67a;--gg:rgba(5,214,122,0.13);
   --red:#f0415a;--rg:rgba(240,65,90,0.13);
-  --blue:#2f86f5;--bg2:rgba(47,134,245,0.11);
-  --gold:#f0b429;--gg3:rgba(240,180,41,0.11);
-  --orange:#f07a2f;--og:rgba(240,122,47,0.18);
+  --blue:#2f86f5;
+  --orange:#f07a2f;
   --font:'Familjen Grotesk',sans-serif;
   --mono:'JetBrains Mono',monospace;
   --radius:18px;
 }
 html[data-theme="light"]{
-  --bg:#f5f2ed;--card:#ffffff;--card2:#f0ece5;
+  --bg:#f5f2ed;--card:#ffffff;--card2:#ede8e0;
   --b1:rgba(0,0,0,0.06);--b2:rgba(0,0,0,0.10);
-  --text:#1a1612;--muted:#9a8f82;--muted2:#b8a898;
-  --green:#0a9e5c;--gg:rgba(10,158,92,0.10);--gg2:rgba(10,158,92,0.06);
+  --text:#1a1612;--muted:#9a8f82;--muted2:#b0a090;
+  --green:#0a9e5c;--gg:rgba(10,158,92,0.10);
   --red:#d63c52;--rg:rgba(214,60,82,0.10);
-  --blue:#2563eb;--bg2:rgba(37,99,235,0.08);
-  --gold:#b45309;--gg3:rgba(180,83,9,0.08);
-  --orange:#ea6b0a;--og:rgba(234,107,10,0.12);
+  --blue:#2563eb;
+  --orange:#ea6b0a;
 }
 
-html,body{min-height:100svh;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");}
-html[data-theme="light"] body::after{opacity:0}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")}
+html[data-theme="light"] body::after{display:none}
 
-/* ══ SCREENS ══ */
+/* ══ SCREEN SYSTEM ══
+   All screens hidden. .on makes them visible.
+   .scr = block layout   .scr-flex = flex layout
+*/
 .scr{display:none}
 .scr.on{display:block;animation:rise .35s cubic-bezier(.2,1,.3,1) both}
+.scr-flex{display:none}
+.scr-flex.on{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;animation:rise .35s cubic-bezier(.2,1,.3,1) both}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-/* ══ LANDING PAGE ══ */
-#s-land{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px 60px;position:relative;z-index:1}
-.land-wrap{width:100%;max-width:400px}
-
-/* theme toggle */
-.theme-row{display:flex;justify-content:flex-end;margin-bottom:20px}
-.theme-btn{display:flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--b2);border-radius:20px;padding:6px 14px 6px 10px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600;color:var(--muted2);font-family:var(--font)}
-.theme-btn:hover{border-color:var(--orange);color:var(--text)}
-.theme-btn .tb-ico{font-size:15px;transition:transform .4s}
-.theme-btn:hover .tb-ico{transform:rotate(20deg)}
-
-.land-card{background:var(--card);border:1px solid var(--b2);border-radius:24px;padding:28px 24px;
-  box-shadow:0 0 0 1px rgba(255,255,255,.02),0 20px 60px rgba(0,0,0,.5)}
-html[data-theme="light"] .land-card{box-shadow:0 4px 40px rgba(0,0,0,.09),0 1px 4px rgba(0,0,0,.05)}
-
-.land-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+/* ══ SHARED ══ */
+.page-pad{padding:32px 20px 60px;position:relative;z-index:1;width:100%}
+.wrap{width:100%;max-width:400px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--b2);border-radius:24px;padding:28px 24px;box-shadow:0 0 0 1px rgba(255,255,255,.02),0 20px 60px rgba(0,0,0,.5)}
+html[data-theme="light"] .card{box-shadow:0 4px 40px rgba(0,0,0,.09)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
 .logo{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted2)}
 .pill{font-family:var(--mono);font-size:10px;background:var(--card2);border:1px solid var(--b2);border-radius:20px;padding:3px 10px;color:var(--muted2)}
-
-.land-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--orange),#e85d10);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:18px;box-shadow:0 8px 28px rgba(240,122,47,.28)}
-.land-ttl{font-size:24px;font-weight:700;line-height:1.2;margin-bottom:8px;letter-spacing:-.3px}
-.land-sub{font-size:13px;color:var(--muted2);margin-bottom:26px;line-height:1.6}
-
-.divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--muted);font-size:12px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--b1)}
-
-/* choice cards */
-.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
-.choice-card{background:var(--card2);border:1.5px solid var(--b2);border-radius:16px;padding:18px 14px;cursor:pointer;transition:all .22s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
-.choice-card:hover{transform:translateY(-2px)}
-.cc-find:hover{border-color:rgba(5,214,122,.45);box-shadow:0 6px 24px rgba(5,214,122,.1)}
-.cc-reg:hover{border-color:rgba(47,134,245,.45);box-shadow:0 6px 24px rgba(47,134,245,.1)}
-.choice-card:active{transform:scale(.97)}
-.cc-ico{font-size:30px}
-.cc-lbl{font-size:13px;font-weight:700;color:var(--text)}
-.cc-sub{font-size:11px;color:var(--muted2);line-height:1.4}
-.cc-find .cc-arrow{color:var(--green);font-size:12px;font-weight:700}
-.cc-reg .cc-arrow{color:var(--blue);font-size:12px;font-weight:700}
-
-/* ══ ONBOARDING (phone entry) ══ */
-#s-onboard{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px 60px;position:relative;z-index:1}
-.ob-wrap{width:100%;max-width:400px}
-.ob-card{background:var(--card);border:1px solid var(--b2);border-radius:24px;padding:28px 24px;box-shadow:0 0 0 1px rgba(255,255,255,.02),0 20px 60px rgba(0,0,0,.5)}
-html[data-theme="light"] .ob-card{box-shadow:0 4px 40px rgba(0,0,0,.09)}
-.ob-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
-.ob-ttl{font-size:22px;font-weight:700;margin-bottom:6px}
-.ob-sub{font-size:13px;color:var(--muted2);margin-bottom:22px;line-height:1.5}
-.fld{margin-bottom:11px}
-.fld label{display:block;font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:5px}
-.fld input{width:100%;background:var(--card2);border:1.5px solid var(--b2);border-radius:11px;padding:11px 13px;color:var(--text);font-family:var(--mono);font-size:20px;letter-spacing:2px;text-align:center;outline:none;transition:border-color .2s}
-.fld input:focus{border-color:var(--orange)}
-.fld input::placeholder{color:var(--muted);font-size:13px;letter-spacing:1px}
-.ob-note{font-size:11px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5}
-.err{font-size:12px;color:var(--red);margin-top:5px;padding:8px 11px;background:var(--rg);border-radius:8px;border:1px solid rgba(240,65,90,.2);display:none}
-.bp{display:block;width:100%;background:var(--blue);border:none;border-radius:12px;padding:13px;color:#fff;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px}
-.bp:hover{opacity:.88;transform:translateY(-1px)}
-.bp.orange{background:var(--orange)}
+.ttl{font-size:22px;font-weight:700;line-height:1.2;margin-bottom:6px}
+.sub{font-size:13px;color:var(--muted2);margin-bottom:22px;line-height:1.5}
+.bp{display:block;width:100%;border:none;border-radius:12px;padding:13px;color:#fff;font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px;background:var(--blue)}
+.bp:hover{filter:brightness(1.12);transform:translateY(-1px)}
 .bp:active{transform:scale(.97)}
+.bp.green{background:var(--green);color:#07090e}
+html[data-theme="light"] .bp.green{color:#fff}
+.bp.orange{background:var(--orange)}
 .bg{display:block;width:100%;background:transparent;border:1.5px solid var(--b2);border-radius:12px;padding:12px;color:var(--muted2);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px}
 .bg:hover{border-color:var(--blue);color:var(--text)}
-.skip-link{font-size:12px;color:var(--muted2);text-align:center;margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-.skip-link:hover{color:var(--text)}
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--muted);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--b1)}
+.fld{margin-bottom:11px}
+.fld label{display:block;font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:5px}
+.fld input,.fld select,.fld textarea{width:100%;background:var(--card2);border:1.5px solid var(--b2);border-radius:11px;padding:11px 13px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--orange)}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--muted)}
+.err{font-size:12px;color:var(--red);margin-top:6px;padding:8px 11px;background:var(--rg);border-radius:8px;border:1px solid rgba(240,65,90,.2);display:none}
 
-/* ══ MAIN APP ══ */
+/* ══ PAGE 1 — LANDING ══ */
+.theme-row{display:flex;justify-content:flex-end;margin-bottom:18px}
+.theme-btn{display:inline-flex;align-items:center;gap:7px;background:var(--card2);border:1px solid var(--b2);border-radius:20px;padding:6px 14px 6px 10px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600;color:var(--muted2);font-family:var(--font)}
+.theme-btn:hover{border-color:var(--orange);color:var(--text)}
+.land-icon{width:64px;height:64px;background:linear-gradient(135deg,var(--orange),#c44d00);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:18px;box-shadow:0 8px 28px rgba(240,122,47,.3)}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-card{background:var(--card2);border:1.5px solid var(--b2);border-radius:16px;padding:20px 14px;cursor:pointer;transition:all .22s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.choice-card:active{transform:scale(.97)}
+.cc-find:hover{border-color:rgba(5,214,122,.5);box-shadow:0 6px 24px rgba(5,214,122,.12)}
+.cc-reg:hover{border-color:rgba(47,134,245,.5);box-shadow:0 6px 24px rgba(47,134,245,.12)}
+html[data-theme="light"] .cc-find:hover{border-color:rgba(10,158,92,.5)}
+html[data-theme="light"] .cc-reg:hover{border-color:rgba(37,99,235,.5)}
+.cc-ico{font-size:32px}
+.cc-lbl{font-size:14px;font-weight:700;color:var(--text)}
+.cc-sub{font-size:11px;color:var(--muted2);line-height:1.4}
+.cc-arrow-g{font-size:12px;font-weight:700;color:var(--green)}
+.cc-arrow-b{font-size:12px;font-weight:700;color:var(--blue)}
+
+/* ══ PAGE 2b — REGISTER ══ */
+.reg-steps{background:var(--card2);border:1px solid var(--b1);border-radius:14px;padding:14px;margin-bottom:16px}
+.reg-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--b1)}
+.reg-step:last-child{border-bottom:none}
+.rs-num{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.rs-txt{font-size:13px;color:var(--muted2);line-height:1.4}
+
+/* ══ PAGE 3 — MAIN APP ══ */
 #s-app{min-height:100vh;background:var(--bg)}
-
-/* header */
-.header{background:var(--card);border-bottom:1px solid var(--b1);padding:14px 18px 0;position:sticky;top:0;z-index:50;box-shadow:0 2px 16px rgba(0,0,0,.15)}
-html[data-theme="light"] .header{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.header{background:var(--card);border-bottom:1px solid var(--b1);padding:14px 18px 0;position:sticky;top:0;z-index:50;box-shadow:0 2px 16px rgba(0,0,0,.2)}
+html[data-theme="light"] .header{box-shadow:0 2px 8px rgba(0,0,0,.07)}
 .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .h-logo{display:flex;align-items:center;gap:8px}
-.h-logo-ico{width:30px;height:30px;background:linear-gradient(135deg,var(--orange),#e85d10);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.h-logo-ico{width:30px;height:30px;background:linear-gradient(135deg,var(--orange),#c44d00);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
 .h-logo-txt{font-size:14px;font-weight:800;letter-spacing:-.3px}
 .h-right{display:flex;align-items:center;gap:8px}
-.live-pill{display:inline-flex;align-items:center;gap:5px;background:var(--gg);border:1px solid rgba(5,214,122,.22);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--green)}
-html[data-theme="light"] .live-pill{background:var(--gg2);border-color:rgba(10,158,92,.18);color:var(--green)}
+.live-pill{display:inline-flex;align-items:center;gap:5px;background:var(--gg);border:1px solid rgba(5,214,122,.22);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--green)}
 .ldot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.8s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1;box-shadow:0 0 7px var(--green)}50%{opacity:.25;box-shadow:none}}
-.h-theme-btn{width:30px;height:30px;border-radius:9px;background:var(--card2);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s}
-.h-theme-btn:hover{border-color:var(--orange)}
-.h-user{width:30px;height:30px;border-radius:9px;background:var(--card2);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s}
-.h-user:hover{border-color:var(--orange)}
-
-/* cat tabs */
+.icon-btn{width:30px;height:30px;border-radius:9px;background:var(--card2);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .2s}
+.icon-btn:hover{border-color:var(--orange)}
 .cat-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;-ms-overflow-style:none;scrollbar-width:none}
 .cat-tabs::-webkit-scrollbar{display:none}
 .cat-tab{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;transition:all .2s;border:1.5px solid var(--b2);background:var(--card2);color:var(--muted2);flex-shrink:0}
@@ -136,20 +120,7 @@ html[data-theme="light"] .live-pill{background:var(--gg2);border-color:rgba(10,1
 .ct-count{font-family:var(--mono);font-size:10px;background:rgba(255,255,255,.15);border-radius:10px;padding:1px 5px;display:none}
 html[data-theme="light"] .cat-tab.on .ct-count{background:rgba(0,0,0,.12)}
 .cat-tab.on .ct-count{display:inline}
-
-/* ══ CONTENT ══ */
 .content{padding:16px 16px 90px;position:relative;z-index:1}
-
-/* search */
-.search-wrap{position:relative;margin-bottom:16px}
-.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none}
-.search-inp{width:100%;background:var(--card);border:1.5px solid var(--b1);border-radius:13px;padding:11px 13px 11px 40px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.search-inp:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(240,122,47,.1)}
-.search-inp::placeholder{color:var(--muted)}
-.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--muted2);border:none;color:#fff;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700}
-.search-clear.show{display:flex}
-
-/* stats */
 .stats-bar{display:flex;gap:10px;margin-bottom:16px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
 .stats-bar::-webkit-scrollbar{display:none}
 .stat-chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:8px 12px;font-size:12px;font-weight:600;white-space:nowrap;flex-shrink:0}
@@ -157,32 +128,30 @@ html[data-theme="light"] .cat-tab.on .ct-count{background:rgba(0,0,0,.12)}
 .stat-chip.g .sc-n{color:var(--green)}
 .stat-chip.r .sc-n{color:var(--red)}
 .stat-chip.b .sc-n{color:var(--blue)}
-
-/* section label */
+.search-wrap{position:relative;margin-bottom:16px}
+.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none}
+.search-inp{width:100%;background:var(--card);border:1.5px solid var(--b1);border-radius:13px;padding:11px 13px 11px 40px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:all .2s}
+.search-inp:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(240,122,47,.1)}
+.search-inp::placeholder{color:var(--muted)}
+.search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--muted2);border:none;color:#fff;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700}
+.search-clear.show{display:flex}
 .section-label{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:7px}
 .section-label::after{content:'';flex:1;height:1px;background:var(--b1)}
-
-/* ══ SHOP CARDS ══ */
 .shop-list{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
-
-.shop-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--b1);overflow:hidden;cursor:pointer;transition:all .22s;box-shadow:0 2px 10px rgba(0,0,0,.12)}
-html[data-theme="light"] .shop-card{box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.shop-card:hover{border-color:var(--orange);box-shadow:0 6px 28px rgba(0,0,0,.2);transform:translateY(-1px)}
-html[data-theme="light"] .shop-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.09)}
+.shop-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--b1);overflow:hidden;cursor:pointer;transition:all .22s}
+.shop-card:hover{border-color:var(--orange);box-shadow:0 6px 28px rgba(0,0,0,.25);transform:translateY(-1px)}
 .shop-card:active{transform:scale(.99)}
 .shop-card.offline{opacity:.7}
-
-.sc-strip{height:3px;background:linear-gradient(90deg,var(--green),rgba(5,214,122,.2))}
+.sc-strip{height:3px;background:linear-gradient(90deg,var(--green),rgba(5,214,122,.15))}
 .shop-card.offline .sc-strip{background:var(--b1)}
-
 .sc-inner{display:flex;align-items:stretch}
-.sc-img{width:80px;flex-shrink:0;position:relative;overflow:hidden;background:var(--card2)}
+.sc-img{width:80px;flex-shrink:0;overflow:hidden;background:var(--card2)}
 .sc-img img{width:100%;height:100%;object-fit:cover}
 .sc-img-empty{width:100%;height:100%;min-height:84px;display:flex;align-items:center;justify-content:center;font-size:26px}
 .sc-body{flex:1;padding:12px 13px;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
 .sc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
 .sc-name{font-size:15px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.status-dot{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.3px;white-space:nowrap;flex-shrink:0}
+.status-dot{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .s-open{background:var(--gg);color:var(--green);border:1px solid rgba(5,214,122,.25)}
 .s-closed{background:var(--rg);color:var(--red);border:1px solid rgba(240,65,90,.25)}
 .s-unknown{background:var(--card2);color:var(--muted2);border:1px solid var(--b1)}
@@ -190,44 +159,39 @@ html[data-theme="light"] .s-open{background:rgba(10,158,92,.1);color:var(--green
 html[data-theme="light"] .s-closed{background:rgba(214,60,82,.1);color:var(--red);border-color:rgba(214,60,82,.18)}
 .sc-owner{font-size:12px;color:var(--muted2);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sc-foot{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.sc-area{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sc-area{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sc-time{font-family:var(--mono);font-size:10px;color:var(--muted2);white-space:nowrap;flex-shrink:0}
 .sc-time.open-time{color:var(--green);font-weight:600}
 .sc-time.closed-time{color:var(--red)}
-
-/* empty / skeleton */
 .empty-state{text-align:center;padding:48px 24px;color:var(--muted2)}
 .empty-ico{font-size:44px;margin-bottom:12px}
 .empty-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
 .empty-sub{font-size:13px;line-height:1.5}
 .skeleton{background:linear-gradient(90deg,var(--card2) 25%,var(--card) 50%,var(--card2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:12px;height:84px;margin-bottom:10px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--card);border-top:1px solid var(--b2);padding:8px 0 max(8px,env(safe-area-inset-bottom));display:flex;box-shadow:0 -4px 20px rgba(0,0,0,.2)}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px;font-size:10px;font-weight:600;color:var(--muted2);border:none;background:none;font-family:var(--font);transition:color .2s}
+.bn-item:hover{color:var(--text)}
+.bn-item.on{color:var(--orange)}
+.bn-ico{font-size:20px;line-height:1}
 
-/* ══ SHOP DETAIL ══ */
-#s-detail{min-height:100vh;background:var(--bg);position:relative;z-index:1}
-.det-header{background:var(--card);border-bottom:1px solid var(--b1);padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;box-shadow:0 2px 14px rgba(0,0,0,.15)}
-html[data-theme="light"] .det-header{box-shadow:0 2px 8px rgba(0,0,0,.06)}
+/* ══ PAGE 4 — DETAIL ══ */
+#s-detail{min-height:100vh;background:var(--bg)}
+.det-header{background:var(--card);border-bottom:1px solid var(--b1);padding:14px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;box-shadow:0 2px 14px rgba(0,0,0,.2)}
 .det-back{width:36px;height:36px;border-radius:11px;background:var(--card2);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:16px;transition:all .2s}
 .det-back:hover{border-color:var(--orange)}
 .det-header-info{flex:1;min-width:0}
 .det-header-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .det-header-sub{font-size:11px;color:var(--muted2)}
-
 .det-body{padding:16px 16px 80px}
-
-/* detail hero images */
 .det-images{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;border-radius:16px;overflow:hidden}
-.det-img{aspect-ratio:1;background:var(--card2);overflow:hidden;position:relative}
-.det-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
-.det-img:hover img{transform:scale(1.04)}
+.det-img{aspect-ratio:1;background:var(--card2);overflow:hidden}
+.det-img img{width:100%;height:100%;object-fit:cover}
 .det-img-empty{width:100%;height:100%;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--muted2);font-size:28px}
 .det-img-empty span{font-size:11px}
 .det-img:first-child{border-radius:16px 0 0 16px}
 .det-img:last-child{border-radius:0 16px 16px 0}
-.det-single{grid-template-columns:1fr;border-radius:16px}
 .det-single .det-img{border-radius:16px!important}
-
-/* status hero */
 .det-status-hero{border-radius:16px;padding:18px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
 .det-status-hero.open{background:var(--gg);border:1px solid rgba(5,214,122,.22)}
 .det-status-hero.closed{background:var(--rg);border:1px solid rgba(240,65,90,.2)}
@@ -240,8 +204,12 @@ html[data-theme="light"] .det-status-hero.closed{background:rgba(214,60,82,.09);
 .closed .dsh-status{color:var(--red)}
 .unknown .dsh-status{color:var(--muted2)}
 .dsh-since{font-size:12px;color:var(--muted2);font-family:var(--mono)}
-
-/* info card */
+.times-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.tg-box{background:var(--card);border:1px solid var(--b1);border-radius:13px;padding:12px}
+.tgb-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
+.tgb-val{font-family:var(--mono);font-size:18px;font-weight:500}
+.tg-open .tgb-val{color:var(--green)}
+.tg-close .tgb-val{color:var(--red)}
 .det-info-card{background:var(--card);border:1px solid var(--b1);border-radius:16px;padding:16px;margin-bottom:12px}
 .dic-title{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:12px}
 .irow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--b1)}
@@ -250,33 +218,25 @@ html[data-theme="light"] .det-status-hero.closed{background:rgba(214,60,82,.09);
 .irow-body{flex:1;min-width:0}
 .irow-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:1px}
 .irow-val{font-size:14px;font-weight:600;color:var(--text)}
-
-/* times */
-.times-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.tg-box{background:var(--card);border:1px solid var(--b1);border-radius:13px;padding:12px}
-.tgb-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:4px;display:flex;align-items:center;gap:4px}
-.tgb-val{font-family:var(--mono);font-size:18px;font-weight:500}
-.tg-open .tgb-val{color:var(--green)}
-.tg-close .tgb-val{color:var(--red)}
-
-/* desc */
-.det-desc{background:var(--card);border:1px solid var(--b1);border-radius:14px;padding:14px;margin-bottom:12px;font-size:13px;line-height:1.6;color:var(--text)}
+.det-desc{background:var(--card);border:1px solid var(--b1);border-radius:14px;padding:14px;margin-bottom:12px;font-size:13px;line-height:1.6}
 .det-desc-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+.dir-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--text);border:none;border-radius:14px;padding:14px;color:var(--bg);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s;margin-bottom:10px}
+.dir-btn:hover{opacity:.85}
 
-/* directions btn */
-.dir-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--text);border:none;border-radius:14px;padding:14px;color:var(--bg);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:10px}
-.dir-btn:hover{opacity:.88}
+/* ── OWNER OPEN/CLOSE BUTTONS ── */
+.ov-btn{padding:16px 10px;border-radius:14px;border:1.5px solid var(--b2);background:var(--card2);color:var(--muted2);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
+.ov-btn span{font-size:22px}
+.bo:not(.a):hover{border-color:rgba(5,214,122,.4);color:rgba(5,214,122,.8)}
+.bc:not(.a):hover{border-color:rgba(240,65,90,.4);color:rgba(240,65,90,.8)}
+.bo.a{background:var(--gg);border-color:rgba(5,214,122,.5);color:var(--green);box-shadow:0 0 20px rgba(5,214,122,.16)}
+.bc.a{background:var(--rg);border-color:rgba(240,65,90,.5);color:var(--red);box-shadow:0 0 20px rgba(240,65,90,.16)}
+html[data-theme="light"] .bo.a{background:rgba(10,158,92,.12);border-color:rgba(10,158,92,.4);color:var(--green)}
+html[data-theme="light"] .bc.a{background:rgba(214,60,82,.1);border-color:rgba(214,60,82,.4);color:var(--red)}
+.ov-btn:active{transform:scale(.96)}
 
-/* ══ BOTTOM NAV ══ */
-.bnav{position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--card);border-top:1px solid var(--b2);padding:8px 0 max(8px,env(safe-area-inset-bottom));display:flex;box-shadow:0 -4px 20px rgba(0,0,0,.15)}
-html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
-.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px;transition:all .2s;font-size:10px;font-weight:600;color:var(--muted2);border:none;background:none;font-family:var(--font)}
-.bn-item:hover{color:var(--text)}
-.bn-item.on{color:var(--orange)}
-.bn-ico{font-size:20px;line-height:1}
-
-/* ══ SYNC BAR ══ */
-.sync{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:7px 14px;font-family:var(--mono);font-size:10px;display:flex;align-items:center;gap:7px;background:var(--card);border-top:1px solid var(--b2)}
+/* sync bar */
+.sync{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:7px 14px;font-family:var(--mono);font-size:10px;display:none;align-items:center;gap:7px;background:var(--card);border-top:1px solid var(--b2)}
+.sync.show{display:flex}
 .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:all .3s}
 .sync.ok .sync-dot{background:var(--green);box-shadow:0 0 6px var(--green)}
 .sync.err .sync-dot{background:var(--red)}
@@ -285,69 +245,225 @@ html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
 </head>
 <body>
 
-<!-- ══ LANDING PAGE ══ -->
-<div id="s-land" class="scr on">
-  <div class="land-wrap">
-    <div class="theme-row">
-      <button class="theme-btn" id="theme-toggle-land" onclick="toggleTheme()">
-        <span class="tb-ico" id="theme-ico-land">🌙</span>
-        <span id="theme-lbl-land">Dark</span>
+<!-- ══════════════════════
+     PAGE 1 — LANDING
+     Always shown first.
+     ══════════════════════ -->
+<div id="s-land" class="scr-flex on">
+  <div class="page-pad">
+    <div class="wrap">
+      <div class="theme-row">
+        <button class="theme-btn" onclick="toggleTheme()">
+          <span id="theme-ico">🌙</span>&nbsp;<span id="theme-lbl">Dark Mode</span>
+        </button>
+      </div>
+      <div class="card">
+        <div class="bar">
+          <div class="logo">ShopStatus</div>
+          <div class="pill">v4.0</div>
+        </div>
+        <div class="land-icon">🏪</div>
+        <div class="ttl">Apki Dukaan,<br>Hamesha Live 🛒</div>
+        <div class="sub">Real-time status of local shops. Know before you go — or manage your own shop.</div>
+        <div class="choice-grid">
+          <div class="choice-card cc-find" onclick="showPage('s-phone')">
+            <div class="cc-ico">🔍</div>
+            <div class="cc-lbl">Find Shops</div>
+            <div class="cc-sub">Check if a shop is open right now</div>
+            <div class="cc-arrow-g">Browse →</div>
+          </div>
+          <div class="choice-card cc-reg" onclick="showPage('s-register')">
+            <div class="cc-ico">🏪</div>
+            <div class="cc-lbl">My Shop</div>
+            <div class="cc-sub">Owner? Register &amp; manage your dukaan</div>
+            <div class="cc-arrow-b">Start →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════
+     PAGE 2a — PHONE ENTRY
+     ══════════════════════ -->
+<div id="s-phone" class="scr-flex">
+  <div class="page-pad">
+    <div class="wrap">
+      <div class="card">
+        <div class="bar">
+          <div class="logo">ShopStatus</div>
+          <div class="pill">Find Shops</div>
+        </div>
+        <div class="ttl">Enter Your Number</div>
+        <div class="sub">Optional — used for tracking only. Never shown publicly.</div>
+        <div class="fld">
+          <label>Phone Number</label>
+          <input type="tel" id="ob-phone" placeholder="03001234567" maxlength="11"
+            style="font-family:var(--mono);font-size:20px;letter-spacing:2px;text-align:center">
+          <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:6px">Your number stays private &amp; secure.</div>
+          <div class="err" id="ob-err">⚠️ Enter a valid number (03XXXXXXXXX)</div>
+        </div>
+        <button class="bp orange" id="ob-continue">Continue →</button>
+        <div style="font-size:12px;color:var(--muted2);text-align:center;margin-top:12px;cursor:pointer;text-decoration:underline;text-underline-offset:2px" id="ob-skip">Browse without entering number</div>
+        <button class="bg" onclick="showPage('s-land')">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════
+     PAGE 2b — MY SHOP (owner landing)
+     ══════════════════════ -->
+<div id="s-register" class="scr-flex">
+  <div class="page-pad">
+    <div class="wrap">
+      <div class="card">
+        <div class="bar">
+          <div class="logo">ShopStatus</div>
+          <div class="pill">Owner</div>
+        </div>
+        <div style="font-size:48px;text-align:center;margin-bottom:14px">🏪</div>
+        <div class="ttl">Apni Dukaan<br>Manage Karein</div>
+        <div class="sub">Register your shop once, then customers will always know if you are open or closed.</div>
+        <button class="bp orange" onclick="showPage('s-do-register')">➕ &nbsp;Register New Shop</button>
+        <div class="divider">already registered?</div>
+        <button class="bg" onclick="showPage('s-owner-login')">📞 &nbsp;Login with Phone Number</button>
+        <button class="bg" onclick="showPage('s-land')">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════
+     PAGE 2c — OWNER LOGIN
+     ══════════════════════ -->
+<div id="s-owner-login" class="scr-flex">
+  <div class="page-pad">
+    <div class="wrap">
+      <div class="card">
+        <div class="bar">
+          <div class="logo">ShopStatus</div>
+          <div class="pill">Owner Login</div>
+        </div>
+        <div class="ttl">Enter Your Number</div>
+        <div class="sub">Type your registered phone number to view your shop info.</div>
+        <div class="fld">
+          <label>Phone Number</label>
+          <input type="tel" id="ol-phone" placeholder="03001234567" maxlength="11"
+            style="font-family:var(--mono);font-size:20px;letter-spacing:2px;text-align:center">
+          <div class="err" id="ol-err">⚠️ No shop found with this number.</div>
+        </div>
+        <button class="bp orange" id="ol-btn">Open My Shop →</button>
+        <button class="bg" onclick="showPage('s-register')">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════
+     PAGE 2d — REGISTER FORM
+     ══════════════════════ -->
+<div id="s-do-register" class="scr-flex">
+  <div class="page-pad">
+    <div class="wrap">
+      <div class="card">
+        <div class="bar">
+          <div class="logo">ShopStatus</div>
+          <div class="pill">Register</div>
+        </div>
+        <div class="ttl">Register Your Shop</div>
+        <div class="sub">Your phone number is your login — no password needed.</div>
+        <div class="fld"><label>Shop Name</label><input type="text" id="r-name" placeholder="e.g. Ali General Store" maxlength="50"></div>
+        <div class="fld"><label>Owner Name</label><input type="text" id="r-owner" placeholder="e.g. Muhammad Ali" maxlength="40"></div>
+        <div class="fld"><label>Phone Number</label><input type="tel" id="r-phone" placeholder="03001234567" maxlength="11"></div>
+        <div class="fld"><label>Category</label>
+          <select id="r-cat">
+            <option value="">— Select —</option>
+            <option value="GR">🛒 Grocery / General Store</option>
+            <option value="MD">💊 Medical / Pharmacy</option>
+            <option value="FD">🍽️ Food / Dhaba / Restaurant</option>
+            <option value="EL">📱 Electronics / Mobile</option>
+            <option value="CL">👕 Clothing / Kapra</option>
+            <option value="HW">🔧 Hardware / Tools</option>
+            <option value="BK">🍞 Bakery</option>
+            <option value="OT">🏪 Other</option>
+          </select>
+        </div>
+        <div class="fld"><label>Area / Mohalla</label><input type="text" id="r-area" placeholder="e.g. Raja Bazaar" maxlength="60"></div>
+        <div class="fld"><label>City</label><input type="text" id="r-city" placeholder="e.g. Rawalpindi" maxlength="30"></div>
+        <div class="fld"><label>Description (Optional)</label><textarea id="r-desc" rows="2" maxlength="200" placeholder="Tell customers about your shop…"></textarea></div>
+        <div class="err" id="r-err">⚠️ Please fill all required fields.</div>
+        <div class="err" id="r-phone-err">⚠️ Enter a valid number (03XXXXXXXXX).</div>
+        <div class="err" id="r-dup-err">⚠️ This number is already registered. Use Login instead.</div>
+        <div class="ok-msg" id="r-ok">✅ Shop registered successfully!</div>
+        <button class="bp orange" id="r-btn">Register My Shop →</button>
+        <button class="bg" onclick="showPage('s-register')">← Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════
+     PAGE 2e — OWNER SHOP VIEW (after login)
+     ══════════════════════ -->
+<div id="s-owner-view" class="scr">
+  <div class="det-header">
+    <div class="det-back" onclick="showPage('s-register')">←</div>
+    <div class="det-header-info">
+      <div class="det-header-name" id="ov-name">My Shop</div>
+      <div class="det-header-sub" id="ov-sub">—</div>
+    </div>
+    <div id="ov-badge"></div>
+  </div>
+  <div class="det-body">
+    <div class="det-status-hero unknown" id="ov-hero">
+      <div class="dsh-ico" id="ov-ico">⬜</div>
+      <div>
+        <div class="dsh-status" id="ov-stat">Unknown</div>
+        <div class="dsh-since" id="ov-since">No update today</div>
+      </div>
+    </div>
+
+    <!-- OPEN / CLOSE BUTTONS -->
+    <div class="brow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <button class="ov-btn bo" id="ov-open-btn" onclick="ownerSetStatus('Open')">
+        <span>🟢</span>OPEN
+      </button>
+      <button class="ov-btn bc" id="ov-close-btn" onclick="ownerSetStatus('Closed')">
+        <span>🔴</span>CLOSED
       </button>
     </div>
-    <div class="land-card">
-      <div class="land-bar">
-        <div class="logo">ShopStatus</div>
-        <div class="pill">v4.0</div>
-      </div>
-      <div class="land-icon">🏪</div>
-      <div class="land-ttl">Apki Dukaan,<br>Hamesha Live 🛒</div>
-      <div class="land-sub">Real-time status of local shops in your area. Know before you go.</div>
 
-      <div class="choice-grid">
-        <div class="choice-card cc-find" onclick="goToFind()">
-          <div class="cc-ico">🔍</div>
-          <div class="cc-lbl">Find Shops</div>
-          <div class="cc-sub">Check if a shop is open right now</div>
-          <div class="cc-arrow">Browse →</div>
-        </div>
-        <div class="choice-card cc-reg" onclick="goToRegister()">
-          <div class="cc-ico">🏪</div>
-          <div class="cc-lbl">Register Shop</div>
-          <div class="cc-sub">Owner? Register &amp; manage your shop</div>
-          <div class="cc-arrow">Start →</div>
-        </div>
-      </div>
+    <div class="times-grid">
+      <div class="tg-box tg-open"><div class="tgb-lbl">🟢 Opened</div><div class="tgb-val" id="ov-open">--:--</div></div>
+      <div class="tg-box tg-close"><div class="tgb-lbl">🔴 Closed</div><div class="tgb-val" id="ov-close">--:--</div></div>
+    </div>
+    <div class="det-info-card">
+      <div class="dic-title">Shop Info</div>
+      <div class="irow"><div class="irow-ico">🏪</div><div class="irow-body"><div class="irow-label">Shop Name</div><div class="irow-val" id="ov-nm">—</div></div></div>
+      <div class="irow"><div class="irow-ico">👤</div><div class="irow-body"><div class="irow-label">Owner</div><div class="irow-val" id="ov-owner">—</div></div></div>
+      <div class="irow"><div class="irow-ico">📞</div><div class="irow-body"><div class="irow-label">Phone</div><div class="irow-val" id="ov-phone">—</div></div></div>
+      <div class="irow"><div class="irow-ico">🏷️</div><div class="irow-body"><div class="irow-label">Category</div><div class="irow-val" id="ov-cat">—</div></div></div>
+      <div class="irow"><div class="irow-ico">📍</div><div class="irow-body"><div class="irow-label">Area</div><div class="irow-val" id="ov-area">—</div></div></div>
+      <div class="irow"><div class="irow-ico">🏙️</div><div class="irow-body"><div class="irow-label">City</div><div class="irow-val" id="ov-city">—</div></div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted2);text-align:center;padding:10px;background:var(--card2);border-radius:10px;border:1px solid var(--b1)">
+      Last sync: <span id="ov-lastsync" style="font-family:var(--mono)">--</span>
     </div>
   </div>
 </div>
 
-<!-- ══ ONBOARDING (phone) ══ -->
-<div id="s-onboard" class="scr">
-  <div class="ob-wrap">
-    <div class="ob-card">
-      <div class="ob-bar">
-        <div class="logo">ShopStatus</div>
-        <div class="pill">Find Shops</div>
-      </div>
-      <div class="ob-ttl">Enter Your Number</div>
-      <div class="ob-sub">Optional — used to track visits only. Never shown publicly.</div>
-      <div class="fld">
-        <label>Phone Number</label>
-        <input type="tel" id="ob-phone" placeholder="03001234567" maxlength="11">
-        <div class="ob-note">Your number is private &amp; secure.</div>
-        <div class="err" id="ob-err">⚠️ Enter a valid number (03XXXXXXXXX)</div>
-      </div>
-      <button class="bp orange" id="ob-continue">Continue →</button>
-      <div class="skip-link" id="ob-skip">Browse without entering number</div>
-      <br>
-      <button class="bg" onclick="show('s-land')">← Back</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══ MAIN APP ══ -->
+<!-- ══════════════════════
+     PAGE 3 — MAIN APP
+     ══════════════════════ -->
 <div id="s-app" class="scr">
-
   <div class="header">
     <div class="header-top">
       <div class="h-logo">
@@ -356,54 +472,33 @@ html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
       </div>
       <div class="h-right">
         <div class="live-pill"><div class="ldot"></div><span id="h-open-count">—</span> Open</div>
-        <div class="h-theme-btn" onclick="toggleTheme()" title="Toggle theme" id="h-theme-btn">🌙</div>
-        <div class="h-user" id="h-user-btn" title="Your profile">👤</div>
+        <div class="icon-btn" onclick="toggleTheme()" id="h-theme-btn">🌙</div>
+        <div class="icon-btn" onclick="showPage('s-land')">🏠</div>
       </div>
     </div>
-    <div class="cat-tabs" id="cat-tabs">
-      <div class="cat-tab on" data-cat="ALL" onclick="selectCat('ALL',this)">
-        <span>🗺️</span> All <span class="ct-count" id="cnt-ALL">0</span>
-      </div>
-      <div class="cat-tab" data-cat="GR" onclick="selectCat('GR',this)">
-        <span>🛒</span> Grocery <span class="ct-count" id="cnt-GR">0</span>
-      </div>
-      <div class="cat-tab" data-cat="FD" onclick="selectCat('FD',this)">
-        <span>🍽️</span> Food <span class="ct-count" id="cnt-FD">0</span>
-      </div>
-      <div class="cat-tab" data-cat="MD" onclick="selectCat('MD',this)">
-        <span>💊</span> Medical <span class="ct-count" id="cnt-MD">0</span>
-      </div>
-      <div class="cat-tab" data-cat="EL" onclick="selectCat('EL',this)">
-        <span>📱</span> Electronics <span class="ct-count" id="cnt-EL">0</span>
-      </div>
-      <div class="cat-tab" data-cat="CL" onclick="selectCat('CL',this)">
-        <span>👕</span> Clothing <span class="ct-count" id="cnt-CL">0</span>
-      </div>
-      <div class="cat-tab" data-cat="HW" onclick="selectCat('HW',this)">
-        <span>🔧</span> Hardware <span class="ct-count" id="cnt-HW">0</span>
-      </div>
-      <div class="cat-tab" data-cat="BK" onclick="selectCat('BK',this)">
-        <span>🍞</span> Bakery <span class="ct-count" id="cnt-BK">0</span>
-      </div>
-      <div class="cat-tab" data-cat="OT" onclick="selectCat('OT',this)">
-        <span>🏪</span> Other <span class="ct-count" id="cnt-OT">0</span>
-      </div>
+    <div class="cat-tabs">
+      <div class="cat-tab on" data-cat="ALL" onclick="selectCat('ALL',this)">🗺️ All <span class="ct-count" id="cnt-ALL">0</span></div>
+      <div class="cat-tab" data-cat="GR" onclick="selectCat('GR',this)">🛒 Grocery <span class="ct-count" id="cnt-GR">0</span></div>
+      <div class="cat-tab" data-cat="FD" onclick="selectCat('FD',this)">🍽️ Food <span class="ct-count" id="cnt-FD">0</span></div>
+      <div class="cat-tab" data-cat="MD" onclick="selectCat('MD',this)">💊 Medical <span class="ct-count" id="cnt-MD">0</span></div>
+      <div class="cat-tab" data-cat="EL" onclick="selectCat('EL',this)">📱 Electronics <span class="ct-count" id="cnt-EL">0</span></div>
+      <div class="cat-tab" data-cat="CL" onclick="selectCat('CL',this)">👕 Clothing <span class="ct-count" id="cnt-CL">0</span></div>
+      <div class="cat-tab" data-cat="HW" onclick="selectCat('HW',this)">🔧 Hardware <span class="ct-count" id="cnt-HW">0</span></div>
+      <div class="cat-tab" data-cat="BK" onclick="selectCat('BK',this)">🍞 Bakery <span class="ct-count" id="cnt-BK">0</span></div>
+      <div class="cat-tab" data-cat="OT" onclick="selectCat('OT',this)">🏪 Other <span class="ct-count" id="cnt-OT">0</span></div>
     </div>
   </div>
-
   <div class="content">
     <div class="stats-bar">
       <div class="stat-chip g"><span class="sc-n" id="st-open">—</span> Open Now</div>
       <div class="stat-chip r"><span class="sc-n" id="st-closed">—</span> Closed</div>
-      <div class="stat-chip b"><span class="sc-n" id="st-total">—</span> Total Shops</div>
+      <div class="stat-chip b"><span class="sc-n" id="st-total">—</span> Total</div>
     </div>
-
     <div class="search-wrap">
       <div class="search-ico">🔍</div>
       <input class="search-inp" id="search-inp" placeholder="Search shop name, owner, area…" oninput="onSearch(this.value)">
       <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
     </div>
-
     <div id="open-section">
       <div class="section-label" id="open-label">Open Now</div>
       <div class="shop-list" id="open-list">
@@ -417,16 +512,18 @@ html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
       <div class="shop-list" id="closed-list"></div>
     </div>
   </div>
-
   <div class="bnav">
-    <button class="bn-item on" onclick="setTab('home',this)"><div class="bn-ico">🏠</div>Home</button>
+    <button class="bn-item" onclick="showPage('s-land')"><div class="bn-ico">🏠</div>Main Menu</button>
+    <button class="bn-item on" onclick="setTab('home',this)"><div class="bn-ico">🗺️</div>All Shops</button>
     <button class="bn-item" onclick="setTab('open',this)"><div class="bn-ico">🟢</div>Open Now</button>
-    <button class="bn-item" onclick="setTab('nearby',this)"><div class="bn-ico">📍</div>Nearby</button>
-    <button class="bn-item" onclick="setTab('profile',this)"><div class="bn-ico">👤</div>Profile</button>
+    <button class="bn-item" onclick="setTab('search',this)"><div class="bn-ico">🔍</div>Search</button>
   </div>
 </div>
 
-<!-- ══ SHOP DETAIL ══ -->
+
+<!-- ══════════════════════
+     PAGE 4 — SHOP DETAIL
+     ══════════════════════ -->
 <div id="s-detail" class="scr">
   <div class="det-header">
     <div class="det-back" id="det-back">←</div>
@@ -440,7 +537,7 @@ html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
     <div id="det-images"></div>
     <div class="det-status-hero unknown" id="det-hero">
       <div class="dsh-ico" id="dh-ico">⬜</div>
-      <div class="dsh-info">
+      <div>
         <div class="dsh-status" id="dh-status">Unknown</div>
         <div class="dsh-since" id="dh-since">No update yet today</div>
       </div>
@@ -465,8 +562,8 @@ html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
   </div>
 </div>
 
-<!-- SYNC BAR (only visible in app) -->
-<div class="sync" id="sync-bar" style="display:none">
+<!-- Sync bar -->
+<div class="sync" id="sync-bar">
   <div class="sync-dot"></div>
   <span class="sync-msg" id="sync-msg">Connecting…</span>
 </div>
@@ -474,93 +571,90 @@ html[data-theme="light"] .bnav{box-shadow:0 -4px 16px rgba(0,0,0,.07)}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
-// ══ FIREBASE ════════════════════════════════════════
 firebase.initializeApp({
   apiKey:      "AIzaSyA0O6Ilwg8Y6GsyC36VQWVAB2YeMwhtowM",
   databaseURL: "https://gpstracking-2db8a-default-rtdb.firebaseio.com",
   projectId:   "gpstracking-2db8a",
 });
 const db = firebase.database();
-
-// ══ GLOBALS ═════════════════════════════════════════
 const G = id => document.getElementById(id);
 const ICONS = {GR:'🛒',MD:'💊',FD:'🍽️',EL:'📱',CL:'👕',HW:'🔧',BK:'🍞',OT:'🏪'};
 const CATS  = {GR:'Grocery / General',MD:'Medical / Pharmacy',FD:'Food / Dhaba',EL:'Electronics',CL:'Clothing',HW:'Hardware',BK:'Bakery',OT:'Other'};
 
-let allShops  = {};
-let activeCat = 'ALL';
-let searchQ   = '';
-let detailRef = null;
-let detailKey = null;
+let allShops   = {};
+let activeCat  = 'ALL';
+let searchQ    = '';
+let detailRef  = null;
+let appStarted = false;
 
-// ══ THEME ════════════════════════════════════════════
+// ── THEME ──────────────────────────────────
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
-  const isDark = t === 'dark';
-  const ico  = isDark ? '🌙' : '☀️';
-  const lbl  = isDark ? 'Dark' : 'Light';
-  G('theme-ico-land').textContent = ico;
-  G('theme-lbl-land').textContent = lbl;
-  if(G('h-theme-btn')) G('h-theme-btn').textContent = ico;
+  const dark = t === 'dark';
+  G('theme-ico').textContent   = dark ? '🌙' : '☀️';
+  G('theme-lbl').textContent   = dark ? 'Dark Mode' : 'Light Mode';
+  G('h-theme-btn').textContent = dark ? '🌙' : '☀️';
   localStorage.setItem('theme', t);
 }
 function toggleTheme() {
-  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-  applyTheme(cur === 'dark' ? 'light' : 'dark');
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
-// Init theme
 applyTheme(localStorage.getItem('theme') || 'dark');
 
-// ══ SYNC BAR ═════════════════════════════════════════
-function sync(state, msg) {
-  G('sync-bar').className = 'sync ' + state;
+// ── SCREEN SWITCHER ────────────────────────
+// This is the ONLY function that shows/hides pages.
+// Landing always shows first — no auto-skip ever.
+function showPage(id) {
+  document.querySelectorAll('.scr, .scr-flex').forEach(el => el.classList.remove('on'));
+  const target = G(id);
+  target.style.animation = 'none';
+  target.offsetHeight; // force reflow to restart animation
+  target.style.animation = '';
+  target.classList.add('on');
+  window.scrollTo(0, 0);
+  // Show sync bar only when inside the app pages
+  G('sync-bar').className = (id === 's-app' || id === 's-detail')
+    ? G('sync-bar').className.includes('ok') ? 'sync show ok' : 'sync show'
+    : 'sync';
+}
+
+// ── FIREBASE SYNC STATUS ──────────────────
+function syncSt(state, msg) {
+  const bar = G('sync-bar');
+  const showing = bar.classList.contains('show');
+  bar.className = 'sync' + (showing ? ' show' : '') + ' ' + state;
   G('sync-msg').textContent = msg;
 }
 db.ref('.info/connected').on('value', s =>
-  s.val() ? sync('ok','Firebase connected ✓') : sync('err','Offline — check internet'));
+  s.val() ? syncSt('ok','Firebase connected ✓') : syncSt('err','Offline — check internet'));
 
-// ══ SCREEN ══════════════════════════════════════════
-function show(id) {
-  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
-  const el = G(id); el.classList.add('on');
-  el.style.animation='none'; el.offsetHeight; el.style.animation='';
-  window.scrollTo(0,0);
-  // Show sync bar only in app/detail
-  G('sync-bar').style.display = (id==='s-app'||id==='s-detail') ? 'flex' : 'none';
-  // Show bnav only in app
-  const bnav = document.querySelector('.bnav');
-  if(bnav) bnav.style.display = id==='s-app' ? 'flex' : 'none';
-}
-
-// ══ LANDING NAVIGATION ═══════════════════════════════
-function goToFind() {
-  if (localStorage.getItem('userSeen')) { startApp(); return; }
-  show('s-onboard');
-}
-function goToRegister() {
-  // Redirect to shopkeeper app
-  alert('Opening ShopKeeper registration…\n\nPlease use the ShopStatus Controller app to register your shop.');
-}
-
-// ══ ONBOARDING ═══════════════════════════════════════
+// ── PHONE PAGE (user side) ───────────────
 G('ob-continue').addEventListener('click', () => {
   const phone = G('ob-phone').value.trim();
   if (phone && !/^03[0-9]{9}$/.test(phone)) { G('ob-err').style.display='block'; return; }
-  G('ob-err').style.display='none';
+  G('ob-err').style.display = 'none';
   if (phone) {
-    const key = '92'+phone.slice(1);
+    const key = '92' + phone.slice(1);
     localStorage.setItem('userPhone', key);
-    db.ref('users/'+key).set({ phone:key, displayPhone:phone, lastVisit: new Date().toISOString() });
+    // Save user phone to Firebase under "users" node
+    db.ref('users/' + key).set({
+      phone: key,
+      displayPhone: phone,
+      firstVisit: new Date().toISOString(),
+      lastVisit: new Date().toISOString(),
+      type: 'customer'
+    });
   }
-  localStorage.setItem('userSeen','1');
-  startApp();
+  enterApp();
 });
-G('ob-skip').addEventListener('click', () => { localStorage.setItem('userSeen','1'); startApp(); });
-G('ob-phone').addEventListener('keydown', e => { if(e.key==='Enter') G('ob-continue').click(); });
+G('ob-skip').addEventListener('click', enterApp);
+G('ob-phone').addEventListener('keydown', e => { if (e.key === 'Enter') G('ob-continue').click(); });
 
-// ══ START APP ════════════════════════════════════════
-function startApp() {
-  show('s-app');
+// ── ENTER APP ─────────────────────────────
+function enterApp() {
+  showPage('s-app');
+  if (appStarted) return;
+  appStarted = true;
   db.ref('shops').on('value', snap => {
     allShops = snap.val() || {};
     updateCounts();
@@ -568,228 +662,302 @@ function startApp() {
   });
 }
 
-// ══ CATEGORY ═════════════════════════════════════════
+// ── CATEGORY ─────────────────────────────
 function selectCat(cat, el) {
   activeCat = cat;
   document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-  searchQ=''; G('search-inp').value=''; G('search-clear').classList.remove('show');
+  searchQ = ''; G('search-inp').value = ''; G('search-clear').classList.remove('show');
   renderList();
-  el.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
 }
 
-// ══ SEARCH ═══════════════════════════════════════════
+// ── SEARCH ───────────────────────────────
 function onSearch(q) {
   searchQ = q.toLowerCase();
-  G('search-clear').classList.toggle('show', q.length>0);
+  G('search-clear').classList.toggle('show', q.length > 0);
   renderList();
 }
 function clearSearch() {
-  searchQ=''; G('search-inp').value=''; G('search-clear').classList.remove('show');
+  searchQ = ''; G('search-inp').value = ''; G('search-clear').classList.remove('show');
   renderList();
 }
 
-// ══ COUNTS ═══════════════════════════════════════════
+// ── COUNTS ───────────────────────────────
 function updateCounts() {
   const shops = Object.values(allShops);
-  const openN = shops.filter(s=>s.status==='Open').length;
+  const openN = shops.filter(s => s.status === 'Open').length;
   G('h-open-count').textContent = openN;
   G('st-open').textContent   = openN;
-  G('st-closed').textContent = shops.filter(s=>s.status==='Closed').length;
+  G('st-closed').textContent = shops.filter(s => s.status === 'Closed').length;
   G('st-total').textContent  = shops.length;
   const cats = {ALL:shops.length,GR:0,MD:0,FD:0,EL:0,CL:0,HW:0,BK:0,OT:0};
-  shops.forEach(s=>{ if(cats[s.cat]!==undefined) cats[s.cat]++; });
-  Object.entries(cats).forEach(([k,v])=>{ const el=G('cnt-'+k); if(el) el.textContent=v; });
+  shops.forEach(s => { if (cats[s.cat] !== undefined) cats[s.cat]++; });
+  Object.entries(cats).forEach(([k,v]) => { const el=G('cnt-'+k); if(el) el.textContent=v; });
 }
 
-// ══ RENDER LIST ══════════════════════════════════════
+// ── RENDER LIST ──────────────────────────
 function renderList() {
   let entries = Object.entries(allShops);
-  if (activeCat!=='ALL') entries = entries.filter(([,s])=>s.cat===activeCat);
-  if (searchQ) entries = entries.filter(([k,s])=>
-    (s.name||'').toLowerCase().includes(searchQ)||
-    (s.owner||'').toLowerCase().includes(searchQ)||
-    (s.area||'').toLowerCase().includes(searchQ)||
+  if (activeCat !== 'ALL') entries = entries.filter(([,s]) => s.cat === activeCat);
+  if (searchQ) entries = entries.filter(([,s]) =>
+    (s.name||'').toLowerCase().includes(searchQ) ||
+    (s.owner||'').toLowerCase().includes(searchQ) ||
+    (s.area||'').toLowerCase().includes(searchQ) ||
     (s.city||'').toLowerCase().includes(searchQ));
 
-  const open    = entries.filter(([,s])=>s.status==='Open');
-  const notOpen = entries.filter(([,s])=>s.status!=='Open');
-  notOpen.sort((a,b)=>{
-    if(a[1].status==='Closed'&&b[1].status!=='Closed') return -1;
-    if(b[1].status==='Closed'&&a[1].status!=='Closed') return 1;
+  const open    = entries.filter(([,s]) => s.status === 'Open');
+  const notOpen = entries.filter(([,s]) => s.status !== 'Open');
+  notOpen.sort((a,b) => {
+    if (a[1].status==='Closed' && b[1].status!=='Closed') return -1;
+    if (b[1].status==='Closed' && a[1].status!=='Closed') return 1;
     return 0;
   });
 
-  G('open-label').textContent   = open.length ? `Open Now (${open.length})` : 'Open Now';
+  G('open-label').textContent   = open.length    ? `Open Now (${open.length})`            : 'Open Now';
   G('closed-label').textContent = notOpen.length ? `Closed / Unknown (${notOpen.length})` : 'Closed / Unknown';
-
   G('open-list').innerHTML = open.length
-    ? open.map(([k,s])=>shopCardHTML(k,s)).join('')
+    ? open.map(([k,s]) => cardHTML(k,s)).join('')
     : '<div class="empty-state"><div class="empty-ico">🔒</div><div class="empty-title">No shops open</div><div class="empty-sub">Check back later or try a different category</div></div>';
-
-  G('closed-list').innerHTML = notOpen.map(([k,s])=>shopCardHTML(k,s)).join('');
+  G('closed-list').innerHTML = notOpen.map(([k,s]) => cardHTML(k,s)).join('');
   G('closed-section').style.display = notOpen.length ? 'block' : 'none';
-  G('open-section').style.display   = 'block';
 
-  if (entries.length===0 && searchQ) {
+  if (!entries.length && searchQ) {
     G('open-list').innerHTML = '<div class="empty-state"><div class="empty-ico">🔍</div><div class="empty-title">No shops found</div><div class="empty-sub">Try different search terms</div></div>';
-    G('closed-section').style.display='none';
+    G('closed-section').style.display = 'none';
   }
 }
 
-// ══ SHOP CARD HTML ════════════════════════════════════
-function shopCardHTML(key, s) {
-  const isOpen   = s.status==='Open';
-  const isClosed = s.status==='Closed';
-  const icon     = ICONS[s.cat]||'🏪';
-  const badge = isOpen
-    ? `<span class="status-dot s-open">● Open</span>`
-    : isClosed
-    ? `<span class="status-dot s-closed">● Closed</span>`
+// ── CARD HTML ────────────────────────────
+function cardHTML(key, s) {
+  const isOpen=s.status==='Open', isClosed=s.status==='Closed';
+  const icon = ICONS[s.cat]||'🏪';
+  const badge = isOpen ? `<span class="status-dot s-open">● Open</span>`
+    : isClosed ? `<span class="status-dot s-closed">● Closed</span>`
     : `<span class="status-dot s-unknown">● Unknown</span>`;
-  const timeStr = isOpen && s.openTime && s.openTime!=='--:--'
-    ? `Since ${s.openTime}`
-    : isClosed && s.closeTime && s.closeTime!=='--:--'
-    ? `Closed ${s.closeTime}` : 'No update today';
-  const timeCls = isOpen ? 'open-time' : isClosed ? 'closed-time' : '';
+  const timeStr = isOpen && s.openTime && s.openTime!=='--:--' ? `Since ${s.openTime}`
+    : isClosed && s.closeTime && s.closeTime!=='--:--' ? `Closed ${s.closeTime}` : 'No update today';
   const imgHTML = s.img1
-    ? `<img src="${s.img1}" alt="${s.name||''}" loading="lazy">`
+    ? `<img src="${s.img1}" alt="" loading="lazy">`
     : `<div class="sc-img-empty">${icon}</div>`;
-  return `
-    <div class="shop-card${!isOpen?' offline':''}" onclick="openDetail('${key}')">
-      <div class="sc-strip"></div>
-      <div class="sc-inner">
-        <div class="sc-img">${imgHTML}</div>
-        <div class="sc-body">
-          <div>
-            <div class="sc-top">
-              <div class="sc-name">${s.name||'—'}</div>
-              <div class="sc-status">${badge}</div>
-            </div>
-            <div class="sc-owner">👤 ${s.owner||'—'}</div>
-          </div>
-          <div class="sc-foot">
-            <div class="sc-area">📍 ${s.area||'—'}${s.city?', '+s.city:''}</div>
-            <div class="sc-time ${timeCls}">${timeStr}</div>
-          </div>
+  return `<div class="shop-card${!isOpen?' offline':''}" onclick="openDetail('${key}')">
+    <div class="sc-strip"></div>
+    <div class="sc-inner">
+      <div class="sc-img">${imgHTML}</div>
+      <div class="sc-body">
+        <div>
+          <div class="sc-top"><div class="sc-name">${s.name||'—'}</div><div>${badge}</div></div>
+          <div class="sc-owner">👤 ${s.owner||'—'}</div>
+        </div>
+        <div class="sc-foot">
+          <div class="sc-area">📍 ${s.area||'—'}${s.city?', '+s.city:''}</div>
+          <div class="sc-time ${isOpen?'open-time':isClosed?'closed-time':''}">${timeStr}</div>
         </div>
       </div>
-    </div>`;
+    </div></div>`;
 }
 
-// ══ SHOP DETAIL ══════════════════════════════════════
+// ── DETAIL ───────────────────────────────
 function openDetail(key) {
   const s = allShops[key]; if(!s) return;
-  detailKey = key;
   G('det-hname').textContent = s.name||'Shop';
-  G('det-hsub').textContent  = (CATS[s.cat]||s.cat||'')+(s.area?' · '+s.area:'');
-
-  const hasImg1=!!s.img1, hasImg2=!!s.img2;
-  let imgHTML='';
-  if(hasImg1||hasImg2){
-    const cls=(hasImg1&&hasImg2)?'':'det-single';
-    imgHTML=`<div class="det-images ${cls}">`;
-    if(hasImg1) imgHTML+=`<div class="det-img"><img src="${s.img1}" alt="Photo 1" loading="lazy"></div>`;
-    if(hasImg2) imgHTML+=`<div class="det-img"><img src="${s.img2}" alt="Photo 2" loading="lazy"></div>`;
-    imgHTML+=`</div>`;
+  G('det-hsub').textContent  = (CATS[s.cat]||'')+(s.area?' · '+s.area:'');
+  const h1=!!s.img1, h2=!!s.img2;
+  let ih='';
+  if(h1||h2){
+    ih=`<div class="det-images${h1&&h2?'':' det-single'}">`;
+    if(h1) ih+=`<div class="det-img"><img src="${s.img1}" loading="lazy"></div>`;
+    if(h2) ih+=`<div class="det-img"><img src="${s.img2}" loading="lazy"></div>`;
+    ih+=`</div>`;
   } else {
-    imgHTML=`<div class="det-images" style="grid-template-columns:1fr;border-radius:16px;margin-bottom:16px"><div class="det-img" style="border-radius:16px!important"><div class="det-img-empty">${ICONS[s.cat]||'🏪'}<span>No photos yet</span></div></div></div>`;
+    ih=`<div class="det-images det-single" style="margin-bottom:16px"><div class="det-img" style="border-radius:16px"><div class="det-img-empty">${ICONS[s.cat]||'🏪'}<span>No photos yet</span></div></div></div>`;
   }
-  G('det-images').innerHTML=imgHTML;
-
-  G('d-name').textContent  = s.name  ||'—';
-  G('d-owner').textContent = s.owner ||'—';
-  G('d-cat').textContent   = (ICONS[s.cat]||'')+' '+(CATS[s.cat]||s.cat||'—');
-  G('d-area').textContent  = s.area  ||'—';
-  G('d-city').textContent  = s.city  ||'—';
-  if(s.desc){ G('det-desc').style.display='block'; G('d-desc-text').textContent=s.desc; }
-  else { G('det-desc').style.display='none'; }
-  G('det-dir').onclick=()=>{
-    const q=encodeURIComponent((s.name||'shop')+' '+(s.area||'')+' '+(s.city||''));
-    window.open('https://www.google.com/maps/search/'+q,'_blank');
-  };
-  applyDetailStatus(s);
-  show('s-detail');
-
+  G('det-images').innerHTML=ih;
+  G('d-name').textContent =s.name||'—'; G('d-owner').textContent=s.owner||'—';
+  G('d-cat').textContent  =(ICONS[s.cat]||'')+' '+(CATS[s.cat]||'—');
+  G('d-area').textContent =s.area||'—'; G('d-city').textContent=s.city||'—';
+  if(s.desc){G('det-desc').style.display='block';G('d-desc-text').textContent=s.desc;}
+  else G('det-desc').style.display='none';
+  G('det-dir').onclick=()=>window.open('https://www.google.com/maps/search/'+encodeURIComponent((s.name||'shop')+' '+(s.area||'')+' '+(s.city||'')),'_blank');
+  applyStatus(s);
+  showPage('s-detail');
   if(detailRef) detailRef.off();
   detailRef=db.ref('shops/'+key);
-  detailRef.on('value',snap=>{
-    const d=snap.val(); if(!d) return;
-    applyDetailStatus(d);
-    G('d-open').textContent  = d.openTime  ||'--:--';
-    G('d-close').textContent = d.closeTime ||'--:--';
+  detailRef.on('value',snap=>{const d=snap.val();if(!d)return;applyStatus(d);G('d-open').textContent=d.openTime||'--:--';G('d-close').textContent=d.closeTime||'--:--';});
+}
+
+function applyStatus(s) {
+  const h=G('det-hero'); h.className='det-status-hero';
+  if(s.status==='Open'){
+    h.classList.add('open');G('dh-ico').textContent='🟢';G('dh-status').textContent='Open Now';
+    G('dh-since').textContent=s.openTime&&s.openTime!=='--:--'?'Since '+s.openTime:'Open today';
+  } else if(s.status==='Closed'){
+    h.classList.add('closed');G('dh-ico').textContent='🔴';G('dh-status').textContent='Closed';
+    G('dh-since').textContent=s.closeTime&&s.closeTime!=='--:--'?'Closed at '+s.closeTime:'Closed today';
+  } else {
+    h.classList.add('unknown');G('dh-ico').textContent='⬜';G('dh-status').textContent='Status Unknown';G('dh-since').textContent='No update today';
+  }
+  G('d-open').textContent=s.openTime||'--:--'; G('d-close').textContent=s.closeTime||'--:--';
+  G('det-hstatus').innerHTML=s.status==='Open'?`<span class="status-dot s-open" style="font-size:11px">● Open</span>`:s.status==='Closed'?`<span class="status-dot s-closed" style="font-size:11px">● Closed</span>`:'';
+}
+
+// ── DETAIL BACK ──────────────────────────
+G('det-back').addEventListener('click',()=>{
+  if(detailRef){detailRef.off();detailRef=null;}
+  showPage('s-app');
+});
+
+// ── BOTTOM NAV ───────────────────────────
+function setTab(tab,el){
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  if(tab==='home') selectCat('ALL',document.querySelector('.cat-tab[data-cat="ALL"]'));
+  else if(tab==='open'){
+    activeCat='ALL';searchQ='';G('search-inp').value='';
+    document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('on'));
+    document.querySelector('.cat-tab[data-cat="ALL"]').classList.add('on');
+    const e=Object.entries(allShops).filter(([,s])=>s.status==='Open');
+    G('open-label').textContent=`Open Now (${e.length})`;
+    G('open-list').innerHTML=e.length?e.map(([k,s])=>cardHTML(k,s)).join(''):'<div class="empty-state"><div class="empty-ico">😴</div><div class="empty-title">No shops open right now</div><div class="empty-sub">Check back soon</div></div>';
+    G('closed-section').style.display='none';
+  } else if(tab==='search'){
+    selectCat('ALL',document.querySelector('.cat-tab[data-cat="ALL"]'));
+    G('search-inp').focus();
+  } else if(tab==='profile'){
+    const p=localStorage.getItem('userPhone');
+    alert(`Your Profile\n\nPhone: ${p?'0'+p.slice(2):'Not set'}\n\nTo update, clear site data and re-open the app.`);
+  }
+}
+
+// ── OWNER: REGISTER ─────────────────────
+function normPhone(p){
+  p=p.replace(/\D/g,'');
+  if(p.startsWith('92')) return p;
+  if(p.startsWith('0'))  return '92'+p.slice(1);
+  return '92'+p;
+}
+function dispPhone(p){
+  p=String(p);
+  return p.startsWith('92') ? '0'+p.slice(2) : p;
+}
+
+G('r-btn').addEventListener('click', async () => {
+  const name  = G('r-name').value.trim();
+  const owner = G('r-owner').value.trim();
+  const phone = G('r-phone').value.trim();
+  const cat   = G('r-cat').value;
+  const area  = G('r-area').value.trim();
+  const city  = G('r-city').value.trim();
+  const desc  = G('r-desc').value.trim();
+
+  ['r-err','r-phone-err','r-dup-err','r-ok'].forEach(id => G(id).style.display='none');
+
+  if (!name||!owner||!phone||!cat||!area||!city){ G('r-err').style.display='block'; return; }
+  if (!/^03[0-9]{9}$/.test(phone)){ G('r-phone-err').style.display='block'; return; }
+
+  const key = normPhone(phone);
+  G('r-btn').disabled=true; G('r-btn').textContent='Checking…';
+
+  const snap = await db.ref('shops/'+key).once('value');
+  if (snap.val()){ G('r-dup-err').style.display='block'; G('r-btn').disabled=false; G('r-btn').textContent='Register My Shop →'; return; }
+
+  G('r-btn').textContent='Registering…';
+  const now = new Date().toISOString();
+  await db.ref('shops/'+key).set({
+    name, owner, phone:key, displayPhone:phone,
+    cat, area, city, desc:desc||'',
+    status:'unknown', openTime:'--:--', closeTime:'--:--',
+    lastUpdated:'--', registeredAt:now, img1:'', img2:'',
+  });
+
+  G('r-ok').style.display='block';
+  G('r-btn').disabled=false; G('r-btn').textContent='Register My Shop →';
+
+  // After 1.5s go to owner view
+  setTimeout(() => openOwnerView(key), 1500);
+});
+
+// ── OWNER: LOGIN ─────────────────────────
+G('ol-btn').addEventListener('click', async () => {
+  const phone = G('ol-phone').value.trim();
+  if (!phone) return;
+  const key = normPhone(phone);
+  G('ol-err').style.display='none';
+  G('ol-btn').disabled=true; G('ol-btn').textContent='Looking up…';
+  const snap = await db.ref('shops/'+key).once('value');
+  G('ol-btn').disabled=false; G('ol-btn').textContent='Open My Shop →';
+  if (!snap.val()){ G('ol-err').style.display='block'; return; }
+  openOwnerView(key);
+});
+G('ol-phone').addEventListener('keydown', e=>{ if(e.key==='Enter') G('ol-btn').click(); });
+
+// ── OWNER VIEW ───────────────────────────
+let ownerRef = null;
+let ownerKey = null;
+
+function openOwnerView(key) {
+  ownerKey = key;
+  if(ownerRef) ownerRef.off();
+  showPage('s-owner-view');
+  ownerRef = db.ref('shops/'+key);
+  ownerRef.on('value', snap => {
+    const d = snap.val(); if(!d) return;
+    G('ov-name').textContent  = d.name||'My Shop';
+    G('ov-sub').textContent   = (CATS[d.cat]||d.cat||'')+(d.area?' · '+d.area:'');
+    G('ov-nm').textContent    = d.name||'—';
+    G('ov-owner').textContent = d.owner||'—';
+    G('ov-phone').textContent = d.displayPhone||dispPhone(key);
+    G('ov-cat').textContent   = (ICONS[d.cat]||'')+' '+(CATS[d.cat]||d.cat||'—');
+    G('ov-area').textContent  = d.area||'—';
+    G('ov-city').textContent  = d.city||'—';
+    G('ov-open').textContent  = d.openTime||'--:--';
+    G('ov-close').textContent = d.closeTime||'--:--';
+    G('ov-lastsync').textContent = d.lastUpdated||'--';
+    // Status hero
+    const h=G('ov-hero'); h.className='det-status-hero';
+    if(d.status==='Open'){
+      h.classList.add('open'); G('ov-ico').textContent='🟢'; G('ov-stat').textContent='Open Now';
+      G('ov-since').textContent=d.openTime&&d.openTime!=='--:--'?'Since '+d.openTime:'Open today';
+      G('ov-open-btn').classList.add('a'); G('ov-close-btn').classList.remove('a');
+    } else if(d.status==='Closed'){
+      h.classList.add('closed'); G('ov-ico').textContent='🔴'; G('ov-stat').textContent='Closed';
+      G('ov-since').textContent=d.closeTime&&d.closeTime!=='--:--'?'Closed at '+d.closeTime:'Closed today';
+      G('ov-close-btn').classList.add('a'); G('ov-open-btn').classList.remove('a');
+    } else {
+      h.classList.add('unknown'); G('ov-ico').textContent='⬜'; G('ov-stat').textContent='Status Unknown';
+      G('ov-since').textContent='No update today';
+      G('ov-open-btn').classList.remove('a'); G('ov-close-btn').classList.remove('a');
+    }
+    G('ov-badge').innerHTML = d.status==='Open'
+      ? `<span class="status-dot s-open" style="font-size:11px">● Open</span>`
+      : d.status==='Closed'
+      ? `<span class="status-dot s-closed" style="font-size:11px">● Closed</span>` : '';
   });
 }
 
-function applyDetailStatus(s) {
-  const hero=G('det-hero');
-  hero.className='det-status-hero';
-  if(s.status==='Open'){
-    hero.classList.add('open');
-    G('dh-ico').textContent='🟢'; G('dh-status').textContent='Open Now';
-    G('dh-since').textContent=s.openTime&&s.openTime!=='--:--'?'Since '+s.openTime:'Open today';
-  } else if(s.status==='Closed'){
-    hero.classList.add('closed');
-    G('dh-ico').textContent='🔴'; G('dh-status').textContent='Closed';
-    G('dh-since').textContent=s.closeTime&&s.closeTime!=='--:--'?'Closed at '+s.closeTime:'Closed today';
-  } else {
-    hero.classList.add('unknown');
-    G('dh-ico').textContent='⬜'; G('dh-status').textContent='Status Unknown';
-    G('dh-since').textContent='No update today';
-  }
-  G('d-open').textContent  = s.openTime  ||'--:--';
-  G('d-close').textContent = s.closeTime ||'--:--';
-  const badge=s.status==='Open'
-    ? `<span class="status-dot s-open" style="font-size:11px">● Open</span>`
-    : s.status==='Closed'
-    ? `<span class="status-dot s-closed" style="font-size:11px">● Closed</span>` : '';
-  G('det-hstatus').innerHTML=badge;
+// ── OWNER: SET STATUS ────────────────────
+function ownerSetStatus(status) {
+  if(!ownerKey || !ownerRef) return;
+  const t = new Date().toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  ownerRef.once('value').then(snap => {
+    const cur = snap.val()||{};
+    return ownerRef.update({
+      status,
+      lastUpdated: t,
+      openTime:  status==='Open'   ? t : (cur.openTime  ||'--:--'),
+      closeTime: status==='Closed' ? t : (cur.closeTime ||'--:--'),
+    });
+  }).then(() => {
+    db.ref('activity').push({
+      type: status==='Open' ? 'status_open' : 'status_closed',
+      phone: ownerKey, timestamp: new Date().toISOString()
+    });
+  }).catch(e => alert('Error: '+e.message));
 }
 
-// ══ BOTTOM NAV ═══════════════════════════════════════
-function setTab(tab, el) {
-  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  if(tab==='home'){
-    selectCat('ALL',document.querySelector('.cat-tab[data-cat="ALL"]'));
-  } else if(tab==='open'){
-    activeCat='ALL'; searchQ=''; G('search-inp').value='';
-    document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('on'));
-    document.querySelector('.cat-tab[data-cat="ALL"]').classList.add('on');
-    const entries=Object.entries(allShops).filter(([,s])=>s.status==='Open');
-    G('open-label').textContent=`Open Now (${entries.length})`;
-    G('open-list').innerHTML=entries.length
-      ? entries.map(([k,s])=>shopCardHTML(k,s)).join('')
-      : '<div class="empty-state"><div class="empty-ico">😴</div><div class="empty-title">No shops open right now</div><div class="empty-sub">Check back soon</div></div>';
-    G('closed-section').style.display='none';
-  } else if(tab==='nearby'){
-    G('search-inp').focus();
-    selectCat('ALL',document.querySelector('.cat-tab[data-cat="ALL"]'));
-  } else if(tab==='profile'){
-    showProfile();
-  }
-}
-
-function showProfile() {
-  const phone=localStorage.getItem('userPhone');
-  const disp=phone?'0'+phone.slice(2):'Not set';
-  alert(`Your Profile\n\nPhone: ${disp}\n\nTo update, clear site data and re-open the app.`);
-}
-
-// ══ BACK ═════════════════════════════════════════════
-G('det-back').addEventListener('click',()=>{
-  if(detailRef){detailRef.off();detailRef=null;}
-  show('s-app');
-});
-window.addEventListener('popstate',()=>{
-  if(G('s-detail').classList.contains('on')){
-    if(detailRef){detailRef.off();detailRef=null;}
-    show('s-app');
-  }
-});
-
-// ══ AUTO START ════════════════════════════════════════
-if(localStorage.getItem('userSeen')) startApp();
+// ── NO AUTO-START ────────────────────────
+// Landing page ALWAYS appears first on every load.
+// No localStorage skip.
 </script>
 </body>
 </html>
